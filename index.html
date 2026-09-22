@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<title>Zeus Script</title>
+<style>
+:root{--bg:#0a0a0a;--card:#121212;--line:#1f1f1f;--text:#ffffff;--muted:#7a7a7a;--accent:#00e0ff;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none}
+html,body{height:100%}
+body{background:#000;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Tahoma,Arial,sans-serif;display:flex;justify-content:center;align-items:center;overflow:hidden;}
+.app{width:100%;max-width:400px;height:100vh;max-height:860px;background:radial-gradient(120% 80% at 50% 0%, #151515 0%, #0a0a0a 55%, #050505 100%);position:relative;display:flex;flex-direction:column;overflow:hidden;border-radius:28px;box-shadow:0 30px 80px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.03);}
+@media (max-width:480px){ .app{height:100vh;border-radius:0;box-shadow:none;} }
+.screen{position:absolute;inset:0;padding:34px 22px 26px;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .35s ease, transform .35s ease;}
+.screen.active{opacity:1;transform:translateY(0);pointer-events:auto;}
+.logo{width:132px;height:132px;object-fit:contain;margin-bottom:20px;filter:drop-shadow(0 8px 24px rgba(255,0,60,.18));animation:floaty 4s ease-in-out infinite;}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.title-text{font-size:16px;font-weight:800;letter-spacing:.3px;margin-bottom:6px;text-align:center}
+.subtitle-text{font-size:12.5px;color:var(--muted);margin-bottom:26px;text-align:center}
+.operator-box{width:100%;border:1px solid var(--line);padding:2px 20px;border-radius:20px;background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0));box-shadow:0 20px 40px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,255,255,.02);}
+.operator-item{display:flex;align-items:center;justify-content:space-between;padding:20px 2px;cursor:pointer;border-bottom:1px solid var(--line);transition:transform .18s ease, background .2s ease;}
+.operator-item:last-child{border-bottom:none;}
+.operator-item:active{transform:scale(.985);}
+.operator-img{height:52px;width:auto;max-width:160px;object-fit:contain;display:block;}
+.checkbox{width:24px;height:24px;border:2px solid #444;border-radius:8px;display:flex;justify-content:center;align-items:center;flex-shrink:0;background:#0d0d0d;transition:.25s ease;}
+.checkbox.active{border-color:var(--accent);background:rgba(0,224,255,.1);box-shadow:0 0 14px rgba(0,224,255,.35)}
+.checkbox.active::after{content:'✔';font-size:13px;color:var(--accent);}
+.loading-overlay{position:absolute;inset:0;z-index:100;background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s ease;}
+.loading-overlay.show{opacity:1;pointer-events:auto;}
+.loading-card{width:270px;background:#fff;color:#000;border-radius:16px;padding:22px 18px 18px;text-align:center;box-shadow:0 25px 60px rgba(0,0,0,.6);transform:scale(.9);transition:transform .35s cubic-bezier(.2,.9,.3,1.2);}
+.loading-overlay.show .loading-card{transform:scale(1);}
+.spinner-lg{width:44px;height:44px;border:4px solid #ececec;border-top-color:#111;border-radius:50%;margin:0 auto 14px;animation:spin .9s linear infinite;}
+.loading-title{font-size:15px;font-weight:800;color:#111;margin-bottom:4px}
+.loading-sub{font-size:12.5px;color:#888;line-height:1.5}
+@keyframes spin{to{transform:rotate(360deg)}}
+.dashboard-screen{justify-content:flex-start;padding-top:26px;}
+.header-timer{width:100%;text-align:center;font-family:'SF Mono',Menlo,monospace;font-size:26px;font-weight:800;letter-spacing:3px;color:#eaeaea;text-shadow:0 0 22px rgba(255,255,255,.06);}
+.main-title{font-size:22px;font-weight:900;letter-spacing:4px;margin:16px 0 26px;background:linear-gradient(180deg,#fff,#a9a9a9);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.circle-container{width:200px;height:200px;border-radius:50%;display:flex;flex-direction:column;justify-content:center;align-items:center;margin:0 auto 30px;position:relative;background:radial-gradient(circle at 50% 40%, rgba(255,255,255,.05), transparent 70%);box-shadow:0 0 0 1px rgba(255,255,255,.06), 0 0 40px rgba(255,255,255,.04) inset;transition:transform .4s ease;}
+.circle-container::before{content:'';position:absolute;inset:-2px;border-radius:50%;background:conic-gradient(from 0deg, transparent 0 60%, rgba(255,255,255,.85) 85%, transparent 100%);animation:rotateRing 3s linear infinite;-webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));opacity:.7;}
+@keyframes rotateRing{to{transform:rotate(360deg)}}
+.circle-value{font-size:42px;font-weight:900;letter-spacing:2px;color:#fff;text-shadow:0 0 30px rgba(255,255,255,.15);animation:popIn .5s cubic-bezier(.2,.9,.3,1.3);}
+@keyframes popIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+.circle-spinner{width:34px;height:34px;border:3px solid rgba(255,255,255,.15);border-top-color:#fff;border-radius:50%;animation:spin .9s linear infinite;margin-top:8px;}
+.footer-text{margin-top:32px;font-size:10.5px;color:#4a4a4a;letter-spacing:3px;text-transform:uppercase;}
+.hidden{display:none !important;}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- شاشة اختيار السيرفر -->
+  <div id="selectionScreen" class="screen active">
+    <img src="https://i.postimg.cc/RVQHkTkf/Photoroom-20260922-022921.png" class="logo" alt="Zeus Logo">
+    <div class="title-text">Choose your service operator</div>
+    <div class="subtitle-text">قم باختيار السيرفر الخاص بك</div>
+    <div class="operator-box">
+      <div class="operator-item" onclick="selectOperator('1xbet', this)">
+        <img src="https://i.postimg.cc/FFp3YpKY/Picsart-26-09-22-02-04-31-031.png" class="operator-img" alt="1xbet">
+        <div class="checkbox"></div>
+      </div>
+      <div class="operator-item" onclick="selectOperator('LINEBET', this)">
+        <img src="https://i.postimg.cc/NGDmKD09/Picsart-26-09-22-02-04-55-965.png" class="operator-img" alt="LINEBET">
+        <div class="checkbox"></div>
+      </div>
+      <div class="operator-item" onclick="selectOperator('MELBET', this)">
+        <img src="https://i.postimg.cc/Df6LS6zW/Picsart-26-09-22-02-05-17-301.png" class="operator-img" alt="MELBET">
+        <div class="checkbox"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة التحميل -->
+  <div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-card">
+      <div class="spinner-lg"></div>
+      <div class="loading-title" id="loadingTitle">جاري الاتصال...</div>
+      <div class="loading-sub" id="loadingSub">يتم الاتصال بسيرفر 1xbet، يرجى الانتظار</div>
+    </div>
+  </div>
+
+  <!-- شاشة الأرقام -->
+  <div id="dashboardScreen" class="screen dashboard-screen">
+    <div class="header-timer" id="timerDisplay">04:00:00</div>
+    <img src="https://i.postimg.cc/RVQHkTkf/Photoroom-20260922-022921.png" class="logo" style="width:100px;height:100px;margin:14px 0 0;animation:none;filter:drop-shadow(0 6px 18px rgba(255,0,60,.18));" alt="Zeus Logo">
+    <div class="main-title">ZEUS SCRIPT</div>
+    <div class="circle-container">
+      <div class="circle-value" id="valueDisplay">0.00</div>
+      <div class="circle-spinner hidden" id="circleSpinner"></div>
+    </div>
+    <div class="footer-text">WELCOME TO ZEUS SCRIPT</div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAUc2C9hG9VE7RECiW19QXjNZqVH96sFE",
+  authDomain: "zezo-59a8d.firebaseapp.com",
+  databaseURL: "https://zezo-59a8d-default-rtdb.firebaseio.com",
+  projectId: "zezo-59a8d",
+  storageBucket: "zezo-59a8d.firebasestorage.app",
+  messagingSenderId: "49183098248",
+  appId: "1:49183098248:web:37e3fb16744042a1bb263d"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+let topTimerInterval;
+let lastRoundId = null;
+let isFirstValue = true;
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+window.selectOperator = function(operatorName, element){
+  document.querySelectorAll('.checkbox').forEach(cb=>cb.classList.remove('active'));
+  element.querySelector('.checkbox').classList.add('active');
+
+  const overlay = document.getElementById('loadingOverlay');
+  document.getElementById('loadingTitle').innerText = 'جاري الاتصال...';
+  document.getElementById('loadingSub').innerText = `يتم الاتصال بسيرفر ${operatorName}، يرجى الانتظار`;
+  overlay.classList.add('show');
+
+  setTimeout(()=>{
+    overlay.classList.remove('show');
+    showScreen('dashboardScreen');
+    startTopTimer(14400);
+  }, 2200);
+};
+
+function startTopTimer(totalSeconds){
+  clearInterval(topTimerInterval);
+  let remaining = totalSeconds;
+  updateTopTimer(remaining);
+  topTimerInterval = setInterval(()=>{
+    if (remaining > 0){ remaining--; updateTopTimer(remaining); }
+    else { clearInterval(topTimerInterval); }
+  },1000);
+}
+
+function updateTopTimer(seconds){
+  const h=Math.floor(seconds/3600).toString().padStart(2,'0');
+  const m=Math.floor((seconds%3600)/60).toString().padStart(2,'0');
+  const s=(seconds%60).toString().padStart(2,'0');
+  document.getElementById('timerDisplay').innerText=`${h}:${m}:${s}`;
+}
+
+/* ================================================================
+   ⭐⭐ السحر كله هنا ⭐⭐
+   نستمع لجولات اللعبة: كل ما roundId جديد → نعرض crashPoint
+   ================================================================ */
+function showPrediction(value){
+  const valueEl = document.getElementById('valueDisplay');
+  const spinnerEl = document.getElementById('circleSpinner');
+
+  // سبينر قصير عشان الشكل
+  valueEl.classList.add('hidden');
+  spinnerEl.classList.remove('hidden');
+
+  setTimeout(()=>{
+    spinnerEl.classList.add('hidden');
+    valueEl.classList.remove('hidden');
+    valueEl.innerText = value;
+    valueEl.style.animation = 'none';
+    void valueEl.offsetWidth;
+    valueEl.style.animation = 'popIn .5s cubic-bezier(.2,.9,.3,1.3)';
+  }, 500);
+}
+
+// نستمع لجولات اللعبة
+onValue(ref(db, "demoRounds/current"), (snap) => {
+  const data = snap.val();
+  if (!data || !data.roundId) return;
+
+  // كل جولة جديدة (roundId مختلف) → نعرض نقطة الانفجار
+  if (data.roundId !== lastRoundId){
+    lastRoundId = data.roundId;
+
+    if (data.crashPoint && data.crashPoint > 1){
+      const val = Number(data.crashPoint).toFixed(2);
+      showPrediction(val);
+      console.log("🎯 New round crash point:", val, "| status:", data.status);
+    }
+  }
+});
+/* ================================================================ */
+</script>
+</body>
+</html>
