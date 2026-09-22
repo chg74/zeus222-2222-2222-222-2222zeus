@@ -41,7 +41,6 @@ body{
   .app{ height: min(calc(var(--vh, 1vh) * 100), 860px); border-radius:28px; } 
 }
 
-/* الخلفية */
 .bg-gradient {
   position: absolute; inset: 0; z-index: 0;
   background: 
@@ -78,7 +77,6 @@ body{
 }
 .screen.active{opacity:1;transform:translateY(0);pointer-events:auto;}
 
-/* اللوجو */
 .logo-wrap {
   position: relative;
   width: clamp(100px, 28vw, 125px);
@@ -136,7 +134,6 @@ body{
 @keyframes rotateRing { to { transform: rotate(360deg); } }
 @keyframes rotateRingReverse { to { transform: rotate(-360deg); } }
 
-/* الفورم */
 .id-form {
   width: 100%;
   display: flex;
@@ -282,7 +279,6 @@ body{
   max-height: 30px;
 }
 
-/* شاشة اختيار السيرفر */
 .title-text{font-size:16px;font-weight:800;letter-spacing:.3px;margin-bottom:6px;text-align:center}
 .subtitle-text{font-size:12.5px;color:#7a7a7a;margin-bottom:26px;text-align:center}
 .operator-box{
@@ -305,7 +301,6 @@ body{
 .checkbox.active{border-color:var(--accent);background:rgba(0,224,255,.1);box-shadow:0 0 14px rgba(0,224,255,.35)}
 .checkbox.active::after{content:'✔';font-size:13px;color:var(--accent);}
 
-/* Loading */
 .loading-overlay{
   position:absolute;inset:0;z-index:100;
   background:rgba(0,0,0,.75);
@@ -328,7 +323,6 @@ body{
 .loading-sub{font-size:12.5px;color:#888;line-height:1.5}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* Dashboard */
 .dashboard-screen{ justify-content: center; padding-top: 90px; }
 .header-timer{
   position: absolute; top: 30px; left: 0; width: 100%;
@@ -347,7 +341,7 @@ body{
 }
 
 /* ============================================
-   الدائرة - الثعبان اللي بيلف حوالين الحدود
+   الدائرة - قابلة للضغط
    ============================================ */
 .circle-container{
   width: 300px; height: 300px;
@@ -361,6 +355,33 @@ body{
       inset 0 0 80px rgba(0, 224, 255, 0.12),
       0 0 0 1px rgba(0, 224, 255, 0.15);
   overflow: visible;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.circle-container:active {
+  transform: scale(0.97);
+}
+
+/* تلميح "اضغط" */
+.tap-hint {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: rgba(0, 224, 255, 0.7);
+  text-shadow: 0 0 10px rgba(0, 224, 255, 0.5);
+  animation: tapPulse 2s ease-in-out infinite;
+  pointer-events: none;
+  white-space: nowrap;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+@keyframes tapPulse {
+  0%,100% { opacity: 0.4; }
+  50% { opacity: 1; }
 }
 
 .snake-outer {
@@ -443,16 +464,6 @@ body{
 }
 @keyframes snakeHeadInner { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-.circle-static-content {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  pointer-events: none;
-  z-index: 6;
-}
-
 .circle-grid {
   position: absolute; inset: 30px;
   border-radius: 50%;
@@ -510,6 +521,7 @@ body{
   z-index: 4;
   top: 0; left: 0;
   transform: scale(0);
+  pointer-events: none;
 }
 .impact-ring.active { animation: impact 1.8s ease-out infinite; }
 .impact-ring.active.ring-2 { animation-delay: 0.25s; border-color: #a855f7; }
@@ -532,6 +544,7 @@ body{
   opacity: 0;
   z-index: 7;
   transform: translate3d(0, -200px, 0) scale(0);
+  pointer-events: none;
 }
 .loading-drop.active {
   animation: dropBeam 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
@@ -554,6 +567,7 @@ body{
   z-index: 10;
   animation: popIn 0.6s cubic-bezier(.2,.9,.3,1.3);
   position: relative;
+  pointer-events: none;
 }
 @keyframes popIn{
   from{opacity:0;transform:scale(.6)}
@@ -576,7 +590,7 @@ body{
   <div class="bg-gradient"></div>
   <div class="bg-grid"></div>
 
-  <!-- ============ 1. شاشة الدخول ============ -->
+  <!-- شاشة الدخول -->
   <div id="accountScreen" class="screen active">
     <div class="logo-wrap">
       <div class="logo-halo"></div>
@@ -591,7 +605,6 @@ body{
     </div>
 
     <div class="id-form">
-      <!-- ID Account - أي حاجة تكتبها عادي -->
       <div class="field-group">
         <div class="id-label">ID Account</div>
         <div class="input-field" id="idField">
@@ -603,7 +616,6 @@ body{
         </div>
       </div>
 
-      <!-- Password - لازم 1234 -->
       <div class="field-group">
         <div class="id-label">Password</div>
         <div class="input-field" id="passField">
@@ -621,7 +633,7 @@ body{
     </div>
   </div>
 
-  <!-- ============ 2. شاشة اختيار السيرفر ============ -->
+  <!-- شاشة اختيار السيرفر -->
   <div id="selectionScreen" class="screen">
     <div class="logo-wrap">
       <div class="logo-halo"></div>
@@ -658,7 +670,7 @@ body{
     </div>
   </div>
 
-  <!-- ============ 4. شاشة التوقعات ============ -->
+  <!-- شاشة التوقعات -->
   <div id="dashboardScreen" class="screen dashboard-screen">
     <div class="header-timer" id="timerDisplay">03:00:00</div>
     
@@ -668,7 +680,8 @@ body{
     </div>
     <div class="main-title">ZEUS SCRIPT</div>
     
-    <div class="circle-container">
+    <!-- الدائرة - قابلة للضغط -->
+    <div class="circle-container" id="circleContainer" onclick="showNextPrediction()">
       <div class="snake-outer"></div>
       <div class="snake-head-outer"></div>
       
@@ -686,6 +699,9 @@ body{
       <div class="loading-drop" id="loadingDrop"></div>
       
       <div class="circle-value hidden" id="valueDisplay">0.00</div>
+      
+      <!-- تلميح الضغط -->
+      <div class="tap-hint" id="tapHint">اضغط على الدائرة</div>
     </div>
     
     <div class="footer-text">WELCOME TO ZEUS SCRIPT</div>
@@ -717,16 +733,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// ============================================
-// كلمة السر المطلوبة فقط
-// ============================================
 const VALID_PASSWORD = "1234";
-// ============================================
 
 let topTimerInterval;
-let predictionQueue = [];
-let currentPredictionIndex = 0;
-let predictionInterval;
+let predictions = [];     // كل التوقعات من الأدمن
+let currentIndex = 0;     // مؤشر التوقع الحالي
+let isAnimating = false;  // عشان نمنع الضغط المتكرر أثناء الأنيميشن
 
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -734,7 +746,7 @@ function showScreen(id){
 }
 
 // ============================================
-// الاتصال: الـ ID أي حاجة، الباسورد لازم 1234
+// الاتصال
 // ============================================
 window.connectAccount = function(){
   const inputPass = document.getElementById('passwordInput').value.trim();
@@ -744,7 +756,6 @@ window.connectAccount = function(){
   passField.classList.remove('error');
   errorMsg.classList.remove('show');
 
-  // لو الباسورد غلط أو فاضي
   if (!inputPass || inputPass !== VALID_PASSWORD) {
     passField.classList.add('error');
     errorMsg.classList.add('show');
@@ -753,7 +764,6 @@ window.connectAccount = function(){
     return;
   }
 
-  // الباسورد صح → الشاشة التالية (الـ ID مش مهم)
   showScreen('selectionScreen');
 };
 
@@ -770,10 +780,6 @@ window.selectOperator = function(operatorName, element){
     overlay.classList.remove('show');
     showScreen('dashboardScreen');
     startTopTimer(10800);
-    if (predictionQueue.length > 0) {
-      currentPredictionIndex = 0;
-      runNextPrediction();
-    }
   }, 2200);
 };
 
@@ -794,59 +800,80 @@ function updateTopTimer(seconds){
   document.getElementById('timerDisplay').innerText=`${h}:${m}:${s}`;
 }
 
-function runNextPrediction(){
-  clearInterval(predictionInterval);
-  if (predictionQueue.length === 0 || currentPredictionIndex >= predictionQueue.length){
-    document.getElementById('loadingDrop').classList.remove('active');
-    document.getElementById('impactRing1').classList.remove('active');
-    document.getElementById('impactRing2').classList.remove('active');
+// ============================================
+// دالة عرض التوقع التالي عند الضغط
+// ============================================
+window.showNextPrediction = function(){
+  // لو في أنيميشن شغال، متعملش حاجة
+  if (isAnimating) return;
+  
+  // لو مفيش توقعات، متعملش حاجة
+  if (predictions.length === 0) {
+    // تأثير اهتزاز بسيط
+    const c = document.getElementById('circleContainer');
+    c.style.animation = 'shake 0.4s';
+    setTimeout(()=>{ c.style.animation = ''; }, 400);
     return;
   }
-
-  const pred = predictionQueue[currentPredictionIndex];
+  
+  // لو خلصنا التوقعات، نرجع للأول
+  if (currentIndex >= predictions.length) {
+    currentIndex = 0;
+  }
+  
+  isAnimating = true;
+  
+  const pred = predictions[currentIndex];
   const valueEl = document.getElementById('valueDisplay');
   const dropEl = document.getElementById('loadingDrop');
   const ring1 = document.getElementById('impactRing1');
   const ring2 = document.getElementById('impactRing2');
-
+  const tapHint = document.getElementById('tapHint');
+  
+  // نخفي التلميح
+  tapHint.style.opacity = '0';
+  
+  // نخفي الرقم القديم ونشغل التحميل
   valueEl.classList.add('hidden');
   dropEl.classList.add('active');
   ring1.classList.add('active');
   ring2.classList.add('active');
-
+  
   setTimeout(()=>{
+    // نوقف التحميل
     dropEl.classList.remove('active');
     ring1.classList.remove('active');
     ring2.classList.remove('active');
     
+    // نعرض التوقع الجديد
     valueEl.classList.remove('hidden');
     valueEl.innerText = pred.value;
     
     valueEl.style.animation = 'none';
     void valueEl.offsetWidth;
     valueEl.style.animation = 'popIn 0.6s cubic-bezier(.2,.9,.3,1.3)';
-
-    let remaining = parseInt(pred.duration) || 60;
-    predictionInterval = setInterval(()=>{
-      if (remaining > 0){ remaining--; }
-      else {
-        clearInterval(predictionInterval);
-        currentPredictionIndex++;
-        runNextPrediction();
-      }
-    },1000);
+    
+    // ننتقل للتوقع اللي بعده
+    currentIndex++;
+    
+    isAnimating = false;
   }, 1800);
-}
+};
 
+// ============================================
+// الاستماع لتوقعات الأدمن
+// ============================================
 const dataRef = ref(db, 'shark_data/predictions');
 onValue(dataRef, (snapshot)=>{
   const data = snapshot.val();
-  if (data && data.length > 0){
-    predictionQueue = data;
-    if (document.getElementById('dashboardScreen').classList.contains('active')){
-      currentPredictionIndex = 0;
-      runNextPrediction();
-    }
+  if (data && Array.isArray(data) && data.length > 0){
+    predictions = data;
+    console.log('تم تحديث التوقعات:', predictions.length);
+  } else if (data && typeof data === 'object') {
+    // لو رجعت كـ object مش array
+    predictions = Object.values(data);
+  } else {
+    predictions = [];
   }
 });
 </script>
