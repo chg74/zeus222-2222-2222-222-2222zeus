@@ -6,53 +6,648 @@
 <meta name="theme-color" content="#0a0a0a">
 <title>Zeus Script</title>
 <style>
-:root{--bg:#0a0a0a;--card:#121212;--line:#1f1f1f;--text:#ffffff;--muted:#7a7a7a;--accent:#00e0ff;}
+:root{
+  --bg:#0a0a0a;
+  --text:#ffffff;
+  --muted:#7a7a7a;
+  --accent:#00e0ff;
+  --accent-dark:#0066ff;
+  --accent-purple:#a855f7;
+}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none}
 html,body{height:100%}
-body{background:#000;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Tahoma,Arial,sans-serif;display:flex;justify-content:center;align-items:center;overflow:hidden;}
-.app{width:100%;max-width:400px;height:100vh;max-height:860px;background:radial-gradient(120% 80% at 50% 0%, #151515 0%, #0a0a0a 55%, #050505 100%);position:relative;display:flex;flex-direction:column;overflow:hidden;border-radius:28px;box-shadow:0 30px 80px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.03);}
+body{
+  background:#000;color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Tahoma,Arial,sans-serif;
+  display:flex;justify-content:center;align-items:center;overflow:hidden;
+  position: relative;
+}
+
+/* ============================================
+   الخلفية السينمائية
+   ============================================ */
+.bg-grid {
+  position: fixed; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(rgba(0, 224, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 224, 255, 0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: moveGrid 25s linear infinite;
+  mask-image: radial-gradient(circle at 50% 50%, #000 20%, transparent 80%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 20%, transparent 80%);
+}
+@keyframes moveGrid {
+  from { background-position: 0 0; }
+  to { background-position: 60px 60px; }
+}
+
+.orb {
+  position: fixed; border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+  z-index: 0;
+}
+.orb-1 {
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, #00e0ff, transparent 70%);
+  top: -120px; left: -120px; opacity: 0.4;
+  animation: floatOrb1 22s ease-in-out infinite;
+}
+.orb-2 {
+  width: 280px; height: 280px;
+  background: radial-gradient(circle, #a855f7, transparent 70%);
+  bottom: -100px; right: -100px; opacity: 0.4;
+  animation: floatOrb2 28s ease-in-out infinite;
+}
+.orb-3 {
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, #0066ff, transparent 70%);
+  top: 40%; right: -80px; opacity: 0.35;
+  animation: floatOrb3 18s ease-in-out infinite;
+}
+.orb-4 {
+  width: 240px; height: 240px;
+  background: radial-gradient(circle, #00e0ff, transparent 70%);
+  bottom: 10%; left: -100px; opacity: 0.3;
+  animation: floatOrb4 24s ease-in-out infinite;
+}
+@keyframes floatOrb1 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(80px,100px) scale(1.15); } }
+@keyframes floatOrb2 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-100px,-80px) scale(1.2); } }
+@keyframes floatOrb3 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-60px,90px); } }
+@keyframes floatOrb4 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(90px,-70px); } }
+
+.bg-ring {
+  position: fixed; top: 50%; left: 50%;
+  border-radius: 50%; pointer-events: none; z-index: 0;
+}
+.bg-ring-1 { width: 500px; height: 500px; margin: -250px 0 0 -250px;
+  border: 1px dashed rgba(0,224,255,0.15); animation: rotateRing 40s linear infinite; }
+.bg-ring-2 { width: 700px; height: 700px; margin: -350px 0 0 -350px;
+  border: 1px dotted rgba(168,85,247,0.12); animation: rotateRingReverse 60s linear infinite; }
+.bg-ring-3 { width: 900px; height: 900px; margin: -450px 0 0 -450px;
+  border: 1px dashed rgba(0,224,255,0.08); animation: rotateRing 90s linear infinite; }
+
+.bg-vignette {
+  position: fixed; inset: 0; z-index: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(0,224,255,0.08) 0%, transparent 50%);
+  animation: vignettePulse 8s ease-in-out infinite alternate;
+}
+@keyframes vignettePulse { 0%{opacity:.6} 100%{opacity:1} }
+
+@keyframes rotateRing { to { transform: rotate(360deg); } }
+@keyframes rotateRingReverse { to { transform: rotate(-360deg); } }
+
+/* ============================================ */
+
+.app{
+  width:100%;max-width:400px;height:100vh;max-height:860px;
+  background:radial-gradient(120% 80% at 50% 0%, #0d0d0d 0%, #0a0a0a 55%, #050505 100%);
+  position:relative;display:flex;flex-direction:column;overflow:hidden;
+  border-radius:28px;
+  box-shadow:0 30px 80px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.04);
+  z-index: 1;
+}
 @media (max-width:480px){ .app{height:100vh;border-radius:0;box-shadow:none;} }
-.screen{position:absolute;inset:0;padding:34px 22px 26px;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .35s ease, transform .35s ease;}
+
+.screen{
+  position:absolute;inset:0;padding:30px 26px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  opacity:0;transform:translateY(8px);pointer-events:none;
+  transition:opacity .35s ease, transform .35s ease;
+}
 .screen.active{opacity:1;transform:translateY(0);pointer-events:auto;}
-.logo{width:132px;height:132px;object-fit:contain;margin-bottom:20px;filter:drop-shadow(0 8px 24px rgba(255,0,60,.18));animation:floaty 4s ease-in-out infinite;}
-@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+/* ============================================
+   اللوجو مع الأشكال حواليه
+   ============================================ */
+.logo-wrap {
+  position: relative;
+  width: clamp(100px, 28vw, 125px);
+  height: clamp(100px, 28vw, 125px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.logo-halo {
+  position: absolute;
+  inset: -25px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,224,255,0.45) 0%, rgba(0,224,255,0.1) 40%, transparent 70%);
+  filter: blur(15px);
+  animation: haloPulse 3s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes haloPulse {
+  0%,100% { opacity: 0.6; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+.logo-orbit {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  animation: rotateRing 12s linear infinite;
+  pointer-events: none;
+}
+.logo-dot {
+  position: absolute;
+  top: -5px; left: 50%;
+  width: 9px; height: 9px;
+  margin-left: -4.5px;
+  background: #00e0ff;
+  border-radius: 50%;
+  box-shadow: 0 0 12px #00e0ff, 0 0 25px #00e0ff;
+}
+.logo-dot.dot-2 {
+  top: auto; bottom: -5px;
+  background: #a855f7;
+  box-shadow: 0 0 12px #a855f7, 0 0 25px #a855f7;
+}
+.logo-dot.dot-3 {
+  top: 50%; left: -5px; right: auto;
+  margin-left: 0; margin-top: -4.5px;
+  background: #0066ff;
+  box-shadow: 0 0 12px #0066ff, 0 0 25px #0066ff;
+}
+
+.logo-ring {
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 1px dashed rgba(0,224,255,0.35);
+  pointer-events: none;
+}
+.logo-ring.ring-a { animation: rotateRing 22s linear infinite; }
+.logo-ring.ring-b { inset: -14px; border-color: rgba(168,85,247,0.3); animation: rotateRingReverse 32s linear infinite; }
+
+.logo-img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  position: relative;
+  z-index: 2;
+  animation: logoGlow 3s ease-in-out infinite alternate;
+}
+@keyframes logoGlow {
+  0% { filter: drop-shadow(0 0 12px rgba(0,224,255,0.5)) drop-shadow(0 0 25px rgba(0,224,255,0.25)); transform: scale(1); }
+  100% { filter: drop-shadow(0 0 25px rgba(0,224,255,0.9)) drop-shadow(0 0 55px rgba(0,224,255,0.5)); transform: scale(1.03); }
+}
+
+/* ============================================
+   نموذج الإدخال
+   ============================================ */
+.id-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 6px;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.id-label {
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 6px;
+  font-weight: 700;
+  color: #7a9eb0;
+  text-transform: uppercase;
+  text-shadow: 0 0 15px rgba(0,224,255,0.5);
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-style: italic;
+  padding-right: 6px;
+}
+
+/* خانة إدخال فخمة */
+.input-field {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  background: linear-gradient(135deg, rgba(0,224,255,0.06), rgba(168,85,247,0.04));
+  border: 1.5px solid rgba(0, 224, 255, 0.3);
+  border-radius: 18px;
+  transition: all 0.4s ease;
+  overflow: hidden;
+  box-shadow: 
+    0 8px 30px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.input-field::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #00e0ff, #a855f7);
+  box-shadow: 0 0 15px rgba(0,224,255,0.8);
+}
+.input-field::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(0,224,255,0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.8s;
+}
+.input-field:focus-within {
+  border-color: #00e0ff;
+  background: linear-gradient(135deg, rgba(0,224,255,0.1), rgba(168,85,247,0.06));
+  box-shadow: 
+    0 8px 30px rgba(0,0,0,0.5),
+    0 0 40px rgba(0,224,255,0.3),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+  transform: translateY(-2px);
+}
+.input-field:focus-within::after {
+  transform: translateX(100%);
+}
+
+/* حالة الخطأ */
+.input-field.error {
+  border-color: #ff3366;
+  animation: shake 0.4s ease;
+}
+.input-field.error::before {
+  background: linear-gradient(to bottom, #ff3366, #ff0080);
+  box-shadow: 0 0 15px rgba(255,51,102,0.8);
+}
+.input-field.error .input-icon {
+  stroke: #ff3366;
+  filter: drop-shadow(0 0 6px rgba(255,51,102,0.8));
+}
+
+.input-icon {
+  width: 22px; height: 22px;
+  flex-shrink: 0;
+  stroke: #00e0ff;
+  fill: none;
+  stroke-width: 1.8;
+  filter: drop-shadow(0 0 6px rgba(0, 224, 255, 0.8));
+  transition: 0.3s;
+}
+.input-field:focus-within .input-icon {
+  transform: scale(1.1);
+  stroke: #fff;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 1));
+}
+
+.id-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'SF Mono', Menlo, monospace;
+  letter-spacing: 3px;
+  padding: 2px 0;
+  min-width: 0;
+}
+.id-input::placeholder {
+  color: #3a4a5a;
+  font-weight: 400;
+  letter-spacing: 2px;
+  font-size: 13px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* زر الاتصال الفخم */
+.connect-btn {
+  position: relative;
+  width: 100%;
+  padding: 17px;
+  background: linear-gradient(135deg, #00e0ff 0%, #0066ff 50%, #a855f7 100%);
+  background-size: 200% 200%;
+  border: none;
+  border-radius: 18px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 5px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  box-shadow: 
+    0 12px 35px rgba(0, 224, 255, 0.35),
+    0 0 0 1px rgba(255,255,255,0.1) inset,
+    0 -3px 0 rgba(0,0,0,0.3) inset;
+  overflow: hidden;
+  animation: gradientShift 5s ease infinite;
+  font-family: inherit;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  margin-top: 8px;
+}
+@keyframes gradientShift {
+  0%,100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.connect-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  animation: shine 3s ease-in-out infinite;
+}
+@keyframes shine {
+  0% { left: -100%; }
+  50%, 100% { left: 100%; }
+}
+.connect-btn:active {
+  transform: scale(0.97) translateY(2px);
+  box-shadow: 
+    0 5px 20px rgba(0, 224, 255, 0.6),
+    0 0 0 1px rgba(255,255,255,0.15) inset;
+}
+
+/* ============ شاشة اختيار السيرفر ============ */
 .title-text{font-size:16px;font-weight:800;letter-spacing:.3px;margin-bottom:6px;text-align:center}
 .subtitle-text{font-size:12.5px;color:var(--muted);margin-bottom:26px;text-align:center}
-.operator-box{width:100%;border:1px solid var(--line);padding:2px 20px;border-radius:20px;background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0));box-shadow:0 20px 40px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,255,255,.02);}
-.operator-item{display:flex;align-items:center;justify-content:space-between;padding:20px 2px;cursor:pointer;border-bottom:1px solid var(--line);transition:transform .18s ease, background .2s ease;}
+
+.operator-box{
+  width:100%;border:1px solid rgba(0, 224, 255, 0.15);padding:2px 20px;border-radius:20px;
+  background:linear-gradient(180deg, rgba(0, 224, 255, 0.03), rgba(255,255,255,0));
+  box-shadow:0 20px 40px rgba(0,0,0,.5), inset 0 0 0 1px rgba(0, 224, 255, 0.05);
+}
+.operator-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 2px;cursor:pointer;border-bottom:1px solid rgba(0, 224, 255, 0.08);
+  transition:transform .18s ease, background .2s ease;
+}
 .operator-item:last-child{border-bottom:none;}
 .operator-item:active{transform:scale(.985);}
 .operator-img{height:52px;width:auto;max-width:160px;object-fit:contain;display:block;}
-.checkbox{width:24px;height:24px;border:2px solid #444;border-radius:8px;display:flex;justify-content:center;align-items:center;flex-shrink:0;background:#0d0d0d;transition:.25s ease;}
+.checkbox{
+  width:24px;height:24px;border:2px solid #444;border-radius:8px;
+  display:flex;justify-content:center;align-items:center;flex-shrink:0;
+  background:#0d0d0d;transition:.25s ease;
+}
 .checkbox.active{border-color:var(--accent);background:rgba(0,224,255,.1);box-shadow:0 0 14px rgba(0,224,255,.35)}
 .checkbox.active::after{content:'✔';font-size:13px;color:var(--accent);}
-.loading-overlay{position:absolute;inset:0;z-index:100;background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s ease;}
+
+/* ============ Loading Modal ============ */
+.loading-overlay{
+  position:absolute;inset:0;z-index:100;
+  background:rgba(0,0,0,.6);
+  -webkit-backdrop-filter:blur(10px);
+  backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .3s ease;
+}
 .loading-overlay.show{opacity:1;pointer-events:auto;}
-.loading-card{width:270px;background:#fff;color:#000;border-radius:16px;padding:22px 18px 18px;text-align:center;box-shadow:0 25px 60px rgba(0,0,0,.6);transform:scale(.9);transition:transform .35s cubic-bezier(.2,.9,.3,1.2);}
+.loading-card{
+  width:270px;background:#fff;color:#000;border-radius:16px;
+  padding:22px 18px 18px;text-align:center;
+  box-shadow:0 25px 60px rgba(0, 224, 255, 0.3);
+  transform:scale(.9);transition:transform .35s cubic-bezier(.2,.9,.3,1.2);
+}
 .loading-overlay.show .loading-card{transform:scale(1);}
-.spinner-lg{width:44px;height:44px;border:4px solid #ececec;border-top-color:#111;border-radius:50%;margin:0 auto 14px;animation:spin .9s linear infinite;}
+.spinner-lg{
+  width:44px;height:44px;border:4px solid #ececec;border-top-color:#00e0ff;
+  border-radius:50%;margin:0 auto 14px;animation:spin .9s linear infinite;
+}
 .loading-title{font-size:15px;font-weight:800;color:#111;margin-bottom:4px}
 .loading-sub{font-size:12.5px;color:#888;line-height:1.5}
 @keyframes spin{to{transform:rotate(360deg)}}
-.dashboard-screen{justify-content:flex-start;padding-top:26px;}
-.header-timer{width:100%;text-align:center;font-family:'SF Mono',Menlo,monospace;font-size:26px;font-weight:800;letter-spacing:3px;color:#eaeaea;text-shadow:0 0 22px rgba(255,255,255,.06);}
-.main-title{font-size:22px;font-weight:900;letter-spacing:4px;margin:16px 0 26px;background:linear-gradient(180deg,#fff,#a9a9a9);-webkit-background-clip:text;background-clip:text;color:transparent;}
-.circle-container{width:200px;height:200px;border-radius:50%;display:flex;flex-direction:column;justify-content:center;align-items:center;margin:0 auto 30px;position:relative;background:radial-gradient(circle at 50% 40%, rgba(255,255,255,.05), transparent 70%);box-shadow:0 0 0 1px rgba(255,255,255,.06), 0 0 40px rgba(255,255,255,.04) inset;transition:transform .4s ease;}
-.circle-container::before{content:'';position:absolute;inset:-2px;border-radius:50%;background:conic-gradient(from 0deg, transparent 0 60%, rgba(255,255,255,.85) 85%, transparent 100%);animation:rotateRing 3s linear infinite;-webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));opacity:.7;}
-@keyframes rotateRing{to{transform:rotate(360deg)}}
-.circle-value{font-size:42px;font-weight:900;letter-spacing:2px;color:#fff;text-shadow:0 0 30px rgba(255,255,255,.15);animation:popIn .5s cubic-bezier(.2,.9,.3,1.3);}
+
+/* ============ Dashboard ============ */
+.dashboard-screen{ justify-content: center; padding-top: 90px; }
+.header-timer{
+  position: absolute; top: 30px; left: 0; width: 100%;
+  text-align: center;
+  font-family: 'SF Mono', Menlo, monospace;
+  font-size: 28px; font-weight: 800; letter-spacing: 3px;
+  color: #eaeaea;
+  text-shadow: 0 0 22px rgba(0, 224, 255, 0.4);
+}
+.main-title{
+  font-size: 22px; font-weight: 900; letter-spacing: 5px;
+  margin: 8px 0 26px;
+  background: linear-gradient(180deg,#fff,#8a8a8a);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  text-align: center;
+}
+
+.circle-container{
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  display: flex; justify-content: center; align-items: center;
+  margin: 0 auto 30px;
+  position: relative;
+  background: radial-gradient(circle at center, #0a1118 0%, #000 80%);
+  box-shadow: 
+      0 0 80px rgba(0, 224, 255, 0.15),
+      inset 0 0 80px rgba(0, 224, 255, 0.12),
+      0 0 0 1px rgba(0, 224, 255, 0.35);
+  overflow: visible;
+  animation: corePulse 4s ease-in-out infinite;
+}
+@keyframes corePulse {
+  0%,100% { box-shadow: 0 0 80px rgba(0,224,255,0.15), inset 0 0 80px rgba(0,224,255,0.12), 0 0 0 1px rgba(0,224,255,0.35); }
+  50% { box-shadow: 0 0 120px rgba(0,224,255,0.3), inset 0 0 100px rgba(0,224,255,0.2), 0 0 0 1px rgba(0,224,255,0.6); }
+}
+
+.orbit { position: absolute; inset: -22px; border-radius: 50%; animation: rotateRing 8s linear infinite; }
+.orbit-dot {
+  position: absolute; top: 0; left: 50%;
+  width: 10px; height: 10px; margin-left: -5px;
+  background: #00e0ff; border-radius: 50%;
+  box-shadow: 0 0 15px #00e0ff, 0 0 30px #00e0ff;
+}
+.orbit-dot-2 { top: auto; bottom: 0; background: #a855f7; box-shadow: 0 0 15px #a855f7, 0 0 30px #a855f7; }
+
+.ring-gradient {
+  position: absolute; inset: -3px; border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0%, #00e0ff 25%, #a855f7 50%, transparent 75%);
+  animation: rotateRing 3s linear infinite;
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+          mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+  filter: drop-shadow(0 0 8px rgba(0, 224, 255, 0.8));
+}
+.ring-dashed {
+  position: absolute; inset: 12px; border-radius: 50%;
+  border: 2px dashed rgba(0, 224, 255, 0.4);
+  animation: rotateRingReverse 22s linear infinite;
+}
+.ring-dots {
+  position: absolute; inset: 24px; border-radius: 50%;
+  border: 1px dotted rgba(0, 224, 255, 0.5);
+  animation: rotateRing 15s linear infinite;
+}
+.circle-grid {
+  position: absolute; inset: 0; border-radius: 50%;
+  background-image: 
+      linear-gradient(rgba(0,224,255,0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,224,255,0.08) 1px, transparent 1px);
+  background-size: 25px 25px;
+  opacity: 0.8; z-index: 0;
+  -webkit-mask-image: radial-gradient(circle, #000 30%, transparent 70%);
+  mask-image: radial-gradient(circle, #000 30%, transparent 70%);
+}
+.radar-sweep {
+  position: absolute; inset: 38px; border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0%, transparent 65%, rgba(0,224,255,0.7) 100%);
+  animation: rotateRing 2.5s linear infinite;
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px));
+          mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px));
+  filter: drop-shadow(0 0 10px #00e0ff);
+}
+.circle-glare {
+  position: absolute; top: 4%; left: 12%;
+  width: 76%; height: 38%; border-radius: 50%;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.15), transparent 80%);
+  transform: rotate(-15deg);
+  pointer-events: none; z-index: 5;
+}
+.loading-drop {
+  position: absolute; top: -50px;
+  width: 6px; height: 50px;
+  background: linear-gradient(to bottom, transparent, #00e0ff, #fff);
+  border-radius: 50%;
+  box-shadow: 0 0 25px #00e0ff, 0 0 50px #00e0ff;
+  opacity: 0; z-index: 3;
+}
+.loading-drop.active { animation: dropBeam 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+@keyframes dropBeam {
+  0% { top: -50px; opacity: 0; transform: scaleY(0.5); }
+  30% { top: 50%; opacity: 1; transform: scaleY(1); }
+  45% { top: 50%; opacity: 1; transform: scale(2) scaleY(4); filter: blur(6px); }
+  60% { top: 50%; opacity: 0; transform: scale(0); }
+  100% { top: 50%; opacity: 0; }
+}
+.impact-ring {
+  position: absolute; width: 100%; height: 100%;
+  border-radius: 50%; border: 2px solid #00e0ff;
+  opacity: 0; z-index: 2; top: 0; left: 0;
+}
+.impact-ring.active { animation: impact 1.8s ease-out infinite; }
+.impact-ring.active.ring-2 { animation-delay: 0.25s; border-color: #a855f7; }
+@keyframes impact {
+  0% { transform: scale(0); opacity: 0; }
+  30% { transform: scale(0); opacity: 0; }
+  45% { transform: scale(0.1); opacity: 1; border-width: 8px; }
+  80% { transform: scale(1); opacity: 0; border-width: 1px; }
+  100% { transform: scale(1); opacity: 0; }
+}
+.circle-value{
+  font-size: 68px; font-weight: 900; letter-spacing: 3px;
+  font-family: 'SF Mono', Menlo, monospace;
+  color: #fff;
+  text-shadow: 0 0 10px #fff, 0 0 25px #00e0ff, 0 0 50px #0066ff;
+  z-index: 10;
+  animation: popIn 0.6s cubic-bezier(.2,.9,.3,1.3);
+  position: relative;
+}
 @keyframes popIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
-.circle-spinner{width:34px;height:34px;border:3px solid rgba(255,255,255,.15);border-top-color:#fff;border-radius:50%;animation:spin .9s linear infinite;margin-top:8px;}
+
 .footer-text{margin-top:32px;font-size:10.5px;color:#4a4a4a;letter-spacing:3px;text-transform:uppercase;}
 .hidden{display:none !important;}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+/* رسالة خطأ صغيرة */
+.error-msg {
+  text-align: center;
+  font-size: 12px;
+  color: #ff3366;
+  letter-spacing: 1px;
+  opacity: 0;
+  max-height: 0;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+.error-msg.show {
+  opacity: 1;
+  max-height: 30px;
+  margin-top: -4px;
+}
 </style>
 </head>
 <body>
 
+<!-- الخلفية المتحركة -->
+<div class="bg-grid"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="orb orb-4"></div>
+<div class="bg-ring bg-ring-1"></div>
+<div class="bg-ring bg-ring-2"></div>
+<div class="bg-ring bg-ring-3"></div>
+<div class="bg-vignette"></div>
+
 <div class="app">
-  <!-- شاشة اختيار السيرفر -->
-  <div id="selectionScreen" class="screen active">
-    <img src="https://i.postimg.cc/RVQHkTkf/Photoroom-20260922-022921.png" class="logo" alt="Zeus Logo">
+  <!-- ============ 1. شاشة إدخال ID + Password ============ -->
+  <div id="accountScreen" class="screen active">
+    
+    <!-- اللوجو مع الأشكال حواليه -->
+    <div class="logo-wrap">
+      <div class="logo-halo"></div>
+      <div class="logo-ring ring-a"></div>
+      <div class="logo-ring ring-b"></div>
+      <div class="logo-orbit">
+        <div class="logo-dot"></div>
+        <div class="logo-dot dot-2"></div>
+        <div class="logo-dot dot-3"></div>
+      </div>
+      <img src="https://i.postimg.cc/RVQHkTkf/Photoroom-20260922-022921.png" class="logo-img" alt="Zeus Logo">
+    </div>
+
+    <!-- نموذج الإدخال -->
+    <div class="id-form">
+      <!-- ID Account -->
+      <div class="field-group">
+        <div class="id-label">ID Account</div>
+        <div class="input-field" id="idField">
+          <svg class="input-icon" viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <input type="text" id="accountIdInput" class="id-input" placeholder="أدخل الرقم الخاص بك" inputmode="numeric" autocomplete="off">
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="field-group">
+        <div class="id-label">Password</div>
+        <div class="input-field" id="passField">
+          <svg class="input-icon" viewBox="0 0 24 24">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <input type="password" id="passwordInput" class="id-input" placeholder="••••" inputmode="numeric" autocomplete="off" maxlength="8">
+        </div>
+      </div>
+      
+      <div class="error-msg" id="errorMsg">كلمة السر غير صحيحة</div>
+      
+      <button class="connect-btn" onclick="connectAccount()">اتصال</button>
+    </div>
+  </div>
+
+  <!-- ============ 2. شاشة اختيار السيرفر ============ -->
+  <div id="selectionScreen" class="screen">
+    <div class="logo-wrap">
+      <div class="logo-halo"></div>
+      <div class="logo-orbit">
+        <div class="logo-dot"></div>
+        <div class="logo-dot dot-2"></div>
+      </div>
+      <img src="https://i.postimg.cc/RVQHkTkf/Photoroom-20260922-022921.png" class="logo-img" alt="Zeus Logo">
+    </div>
     <div class="title-text">Choose your service operator</div>
     <div class="subtitle-text">قم باختيار السيرفر الخاص بك</div>
     <div class="operator-box">
@@ -71,7 +666,7 @@ body{background:#000;color:var(--text);font-family:-apple-system,BlinkMacSystemF
     </div>
   </div>
 
-  <!-- نافذة التحميل -->
+  <!-- ============ 3. نافذة التحميل ============ -->
   <div id="loadingOverlay" class="loading-overlay">
     <div class="loading-card">
       <div class="spinner-lg"></div>
@@ -80,15 +675,38 @@ body{background:#000;color:var(--text);font-family:-apple-system,BlinkMacSystemF
     </div>
   </div>
 
-  <!-- شاشة الأرقام -->
+  <!-- ============ 4. شاشة التوقعات ============ -->
   <div id="dashboardScreen" class="screen dashboard-screen">
-    <div class="header-timer" id="timerDisplay">04:00:00</div>
-    <img src="https://i.postimg.cc/RVQHkTkf/Photoroom-20260922-022921.png" class="logo" style="width:100px;height:100px;margin:14px 0 0;animation:none;filter:drop-shadow(0 6px 18px rgba(255,0,60,.18));" alt="Zeus Logo">
-    <div class="main-title">ZEUS SCRIPT</div>
-    <div class="circle-container">
-      <div class="circle-value" id="valueDisplay">0.00</div>
-      <div class="circle-spinner hidden" id="circleSpinner"></div>
+    <div class="header-timer" id="timerDisplay">03:00:00</div>
+    
+    <div class="logo-wrap" style="width:100px;height:100px;margin:0 0 4px;">
+      <div class="logo-halo" style="inset:-15px;"></div>
+      <img src="https://i.postimg.cc/RVQHkTkf/Photoroom-20260922-022921.png" class="logo-img" alt="Zeus Logo">
     </div>
+    <div class="main-title">ZEUS SCRIPT</div>
+    
+    <div class="circle-container">
+      <div class="circle-grid"></div>
+      
+      <div class="orbit">
+        <div class="orbit-dot"></div>
+        <div class="orbit-dot orbit-dot-2"></div>
+      </div>
+      
+      <div class="ring-gradient"></div>
+      <div class="ring-dashed"></div>
+      <div class="ring-dots"></div>
+      <div class="radar-sweep"></div>
+      
+      <div class="impact-ring" id="impactRing1"></div>
+      <div class="impact-ring ring-2" id="impactRing2"></div>
+      
+      <div class="loading-drop" id="loadingDrop"></div>
+      <div class="circle-glare"></div>
+      
+      <div class="circle-value hidden" id="valueDisplay">0.00</div>
+    </div>
+    
     <div class="footer-text">WELCOME TO ZEUS SCRIPT</div>
   </div>
 </div>
@@ -110,14 +728,55 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+// كلمة السر المطلوبة
+const REQUIRED_PASSWORD = "1234";
+
 let topTimerInterval;
-let lastRoundId = null;
-let isFirstValue = true;
+let predictionQueue = [];
+let currentPredictionIndex = 0;
+let predictionInterval;
 
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
+
+// دالة الاتصال مع التحقق من كلمة السر
+window.connectAccount = function(){
+  const accountId = document.getElementById('accountIdInput').value.trim();
+  const password = document.getElementById('passwordInput').value.trim();
+  const idField = document.getElementById('idField');
+  const passField = document.getElementById('passField');
+  const errorMsg = document.getElementById('errorMsg');
+
+  // تصفير الحالة
+  idField.classList.remove('error');
+  passField.classList.remove('error');
+  errorMsg.classList.remove('show');
+
+  // التحقق من خانة ID
+  if (!accountId) {
+    idField.classList.add('error');
+    setTimeout(()=>{ idField.classList.remove('error'); }, 500);
+    return;
+  }
+
+  // التحقق من كلمة السر
+  if (password !== REQUIRED_PASSWORD) {
+    passField.classList.add('error');
+    errorMsg.classList.add('show');
+    setTimeout(()=>{ 
+      passField.classList.remove('error'); 
+    }, 500);
+    setTimeout(()=>{ 
+      errorMsg.classList.remove('show'); 
+    }, 2500);
+    return;
+  }
+
+  // النجاح - الانتقال للشاشة التالية
+  showScreen('selectionScreen');
+};
 
 window.selectOperator = function(operatorName, element){
   document.querySelectorAll('.checkbox').forEach(cb=>cb.classList.remove('active'));
@@ -131,7 +790,11 @@ window.selectOperator = function(operatorName, element){
   setTimeout(()=>{
     overlay.classList.remove('show');
     showScreen('dashboardScreen');
-    startTopTimer(14400);
+    startTopTimer(10800);
+    if (predictionQueue.length > 0) {
+      currentPredictionIndex = 0;
+      runNextPrediction();
+    }
   }, 2200);
 };
 
@@ -152,45 +815,61 @@ function updateTopTimer(seconds){
   document.getElementById('timerDisplay').innerText=`${h}:${m}:${s}`;
 }
 
-/* ================================================================
-   ⭐⭐ السحر كله هنا ⭐⭐
-   نستمع لجولات اللعبة: كل ما roundId جديد → نعرض crashPoint
-   ================================================================ */
-function showPrediction(value){
-  const valueEl = document.getElementById('valueDisplay');
-  const spinnerEl = document.getElementById('circleSpinner');
+function runNextPrediction(){
+  clearInterval(predictionInterval);
+  if (predictionQueue.length === 0 || currentPredictionIndex >= predictionQueue.length){
+    document.getElementById('loadingDrop').classList.remove('active');
+    document.getElementById('impactRing1').classList.remove('active');
+    document.getElementById('impactRing2').classList.remove('active');
+    return;
+  }
 
-  // سبينر قصير عشان الشكل
+  const pred = predictionQueue[currentPredictionIndex];
+  const valueEl = document.getElementById('valueDisplay');
+  const dropEl = document.getElementById('loadingDrop');
+  const ring1 = document.getElementById('impactRing1');
+  const ring2 = document.getElementById('impactRing2');
+
   valueEl.classList.add('hidden');
-  spinnerEl.classList.remove('hidden');
+  dropEl.classList.add('active');
+  ring1.classList.add('active');
+  ring2.classList.add('active');
 
   setTimeout(()=>{
-    spinnerEl.classList.add('hidden');
+    dropEl.classList.remove('active');
+    ring1.classList.remove('active');
+    ring2.classList.remove('active');
+    
     valueEl.classList.remove('hidden');
-    valueEl.innerText = value;
+    valueEl.innerText = pred.value;
+    
     valueEl.style.animation = 'none';
     void valueEl.offsetWidth;
-    valueEl.style.animation = 'popIn .5s cubic-bezier(.2,.9,.3,1.3)';
-  }, 500);
+    valueEl.style.animation = 'popIn 0.6s cubic-bezier(.2,.9,.3,1.3)';
+
+    let remaining = parseInt(pred.duration) || 60;
+    predictionInterval = setInterval(()=>{
+      if (remaining > 0){ remaining--; }
+      else {
+        clearInterval(predictionInterval);
+        currentPredictionIndex++;
+        runNextPrediction();
+      }
+    },1000);
+  }, 1800);
 }
 
-// نستمع لجولات اللعبة
-onValue(ref(db, "demoRounds/current"), (snap) => {
-  const data = snap.val();
-  if (!data || !data.roundId) return;
-
-  // كل جولة جديدة (roundId مختلف) → نعرض نقطة الانفجار
-  if (data.roundId !== lastRoundId){
-    lastRoundId = data.roundId;
-
-    if (data.crashPoint && data.crashPoint > 1){
-      const val = Number(data.crashPoint).toFixed(2);
-      showPrediction(val);
-      console.log("🎯 New round crash point:", val, "| status:", data.status);
+const dataRef = ref(db, 'shark_data/predictions');
+onValue(dataRef, (snapshot)=>{
+  const data = snapshot.val();
+  if (data && data.length > 0){
+    predictionQueue = data;
+    if (document.getElementById('dashboardScreen').classList.contains('active')){
+      currentPredictionIndex = 0;
+      runNextPrediction();
     }
   }
 });
-/* ================================================================ */
 </script>
 </body>
 </html>
