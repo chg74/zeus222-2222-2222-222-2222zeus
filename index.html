@@ -2,138 +2,92 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <meta name="theme-color" content="#0a0a0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <title>Zeus Script</title>
 <style>
 :root{
-  --bg:#0a0a0a;
   --text:#ffffff;
-  --muted:#7a7a7a;
   --accent:#00e0ff;
-  --accent-dark:#0066ff;
-  --accent-purple:#a855f7;
+  --vh: 1vh;
 }
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none}
-html,body{height:100%}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+html{height:100%;overflow:hidden;position:fixed;width:100%;top:0;left:0}
 body{
-  background:#000;color:var(--text);
+  height:100%;width:100%;
+  background:#050510;color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Tahoma,Arial,sans-serif;
-  display:flex;justify-content:center;align-items:center;overflow:hidden;
-  position: relative;
+  display:flex;justify-content:center;align-items:center;
+  overflow:hidden;
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  overscroll-behavior:none;
+  -webkit-font-smoothing:antialiased;
 }
-
-/* ============================================
-   الخلفية السينمائية
-   ============================================ */
-.bg-grid {
-  position: fixed; inset: 0; z-index: 0;
-  background-image:
-    linear-gradient(rgba(0, 224, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 224, 255, 0.05) 1px, transparent 1px);
-  background-size: 60px 60px;
-  animation: moveGrid 25s linear infinite;
-  mask-image: radial-gradient(circle at 50% 50%, #000 20%, transparent 80%);
-  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 20%, transparent 80%);
-}
-@keyframes moveGrid {
-  from { background-position: 0 0; }
-  to { background-position: 60px 60px; }
-}
-
-.orb {
-  position: fixed; border-radius: 50%;
-  filter: blur(90px);
-  pointer-events: none;
-  z-index: 0;
-}
-.orb-1 {
-  width: 320px; height: 320px;
-  background: radial-gradient(circle, #00e0ff, transparent 70%);
-  top: -120px; left: -120px; opacity: 0.4;
-  animation: floatOrb1 22s ease-in-out infinite;
-}
-.orb-2 {
-  width: 280px; height: 280px;
-  background: radial-gradient(circle, #a855f7, transparent 70%);
-  bottom: -100px; right: -100px; opacity: 0.4;
-  animation: floatOrb2 28s ease-in-out infinite;
-}
-.orb-3 {
-  width: 200px; height: 200px;
-  background: radial-gradient(circle, #0066ff, transparent 70%);
-  top: 40%; right: -80px; opacity: 0.35;
-  animation: floatOrb3 18s ease-in-out infinite;
-}
-.orb-4 {
-  width: 240px; height: 240px;
-  background: radial-gradient(circle, #00e0ff, transparent 70%);
-  bottom: 10%; left: -100px; opacity: 0.3;
-  animation: floatOrb4 24s ease-in-out infinite;
-}
-@keyframes floatOrb1 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(80px,100px) scale(1.15); } }
-@keyframes floatOrb2 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-100px,-80px) scale(1.2); } }
-@keyframes floatOrb3 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-60px,90px); } }
-@keyframes floatOrb4 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(90px,-70px); } }
-
-.bg-ring {
-  position: fixed; top: 50%; left: 50%;
-  border-radius: 50%; pointer-events: none; z-index: 0;
-}
-.bg-ring-1 { width: 500px; height: 500px; margin: -250px 0 0 -250px;
-  border: 1px dashed rgba(0,224,255,0.15); animation: rotateRing 40s linear infinite; }
-.bg-ring-2 { width: 700px; height: 700px; margin: -350px 0 0 -350px;
-  border: 1px dotted rgba(168,85,247,0.12); animation: rotateRingReverse 60s linear infinite; }
-.bg-ring-3 { width: 900px; height: 900px; margin: -450px 0 0 -450px;
-  border: 1px dashed rgba(0,224,255,0.08); animation: rotateRing 90s linear infinite; }
-
-.bg-vignette {
-  position: fixed; inset: 0; z-index: 0;
-  background: radial-gradient(circle at 50% 50%, rgba(0,224,255,0.08) 0%, transparent 50%);
-  animation: vignettePulse 8s ease-in-out infinite alternate;
-}
-@keyframes vignettePulse { 0%{opacity:.6} 100%{opacity:1} }
-
-@keyframes rotateRing { to { transform: rotate(360deg); } }
-@keyframes rotateRingReverse { to { transform: rotate(-360deg); } }
-
-/* ============================================ */
 
 .app{
-  width:100%;max-width:400px;height:100vh;max-height:860px;
-  background:radial-gradient(120% 80% at 50% 0%, #0d0d0d 0%, #0a0a0a 55%, #050505 100%);
+  width:100%;max-width:400px;
+  height: calc(var(--vh, 1vh) * 100);
+  background:#050510;
   position:relative;display:flex;flex-direction:column;overflow:hidden;
-  border-radius:28px;
+  border-radius:0;
   box-shadow:0 30px 80px rgba(0,0,0,.9), 0 0 0 1px rgba(255,255,255,.04);
   z-index: 1;
+  transform: translateZ(0);
+  isolation: isolate;
 }
-@media (max-width:480px){ .app{height:100vh;border-radius:0;box-shadow:none;} }
+@media (min-width:481px){ 
+  .app{ height: min(calc(var(--vh, 1vh) * 100), 860px); border-radius:28px; } 
+}
+
+/* الخلفية */
+.bg-gradient {
+  position: absolute; inset: 0; z-index: 0;
+  background: 
+    radial-gradient(circle at 15% 15%, rgba(0, 102, 255, 0.55) 0%, transparent 45%),
+    radial-gradient(circle at 85% 85%, rgba(255, 51, 102, 0.55) 0%, transparent 45%),
+    radial-gradient(circle at 85% 15%, rgba(168, 85, 247, 0.35) 0%, transparent 50%),
+    radial-gradient(circle at 15% 85%, rgba(255, 51, 102, 0.3) 0%, transparent 50%),
+    linear-gradient(135deg, #0a0a1f 0%, #150a1a 50%, #0a0a1f 100%);
+  animation: gradientPulse 8s ease-in-out infinite alternate;
+}
+@keyframes gradientPulse { 0% { opacity: 0.85; } 100% { opacity: 1; } }
+
+.bg-grid {
+  position: absolute; inset: -60px; z-index: 0;
+  background-image:
+    linear-gradient(rgba(0, 224, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 224, 255, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: moveGrid 30s linear infinite;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 20%, transparent 85%);
+  mask-image: radial-gradient(circle at 50% 50%, #000 20%, transparent 85%);
+}
+@keyframes moveGrid {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(60px, 60px, 0); }
+}
 
 .screen{
   position:absolute;inset:0;padding:30px 26px;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   opacity:0;transform:translateY(8px);pointer-events:none;
   transition:opacity .35s ease, transform .35s ease;
+  z-index: 2;
 }
 .screen.active{opacity:1;transform:translateY(0);pointer-events:auto;}
 
-/* ============================================
-   اللوجو مع الأشكال حواليه
-   ============================================ */
+/* اللوجو */
 .logo-wrap {
   position: relative;
   width: clamp(100px, 28vw, 125px);
   height: clamp(100px, 28vw, 125px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   margin-bottom: 24px;
 }
-
 .logo-halo {
-  position: absolute;
-  inset: -25px;
-  border-radius: 50%;
+  position: absolute; inset: -25px; border-radius: 50%;
   background: radial-gradient(circle, rgba(0,224,255,0.45) 0%, rgba(0,224,255,0.1) 40%, transparent 70%);
   filter: blur(15px);
   animation: haloPulse 3s ease-in-out infinite;
@@ -143,135 +97,96 @@ body{
   0%,100% { opacity: 0.6; transform: scale(0.9); }
   50% { opacity: 1; transform: scale(1.15); }
 }
-
 .logo-orbit {
-  position: absolute;
-  inset: -6px;
-  border-radius: 50%;
+  position: absolute; inset: -6px; border-radius: 50%;
   animation: rotateRing 12s linear infinite;
   pointer-events: none;
 }
 .logo-dot {
-  position: absolute;
-  top: -5px; left: 50%;
-  width: 9px; height: 9px;
-  margin-left: -4.5px;
-  background: #00e0ff;
-  border-radius: 50%;
+  position: absolute; top: -5px; left: 50%;
+  width: 9px; height: 9px; margin-left: -4.5px;
+  background: #00e0ff; border-radius: 50%;
   box-shadow: 0 0 12px #00e0ff, 0 0 25px #00e0ff;
 }
 .logo-dot.dot-2 {
-  top: auto; bottom: -5px;
-  background: #a855f7;
+  top: auto; bottom: -5px; background: #a855f7;
   box-shadow: 0 0 12px #a855f7, 0 0 25px #a855f7;
 }
 .logo-dot.dot-3 {
   top: 50%; left: -5px; right: auto;
   margin-left: 0; margin-top: -4.5px;
-  background: #0066ff;
-  box-shadow: 0 0 12px #0066ff, 0 0 25px #0066ff;
+  background: #0066ff; box-shadow: 0 0 12px #0066ff, 0 0 25px #0066ff;
 }
-
 .logo-ring {
-  position: absolute;
-  inset: -2px;
-  border-radius: 50%;
+  position: absolute; inset: -2px; border-radius: 50%;
   border: 1px dashed rgba(0,224,255,0.35);
   pointer-events: none;
 }
 .logo-ring.ring-a { animation: rotateRing 22s linear infinite; }
 .logo-ring.ring-b { inset: -14px; border-color: rgba(168,85,247,0.3); animation: rotateRingReverse 32s linear infinite; }
-
 .logo-img {
-  width: 100%; height: 100%;
-  object-fit: contain;
-  position: relative;
-  z-index: 2;
+  width: 100%; height: 100%; object-fit: contain;
+  position: relative; z-index: 2;
   animation: logoGlow 3s ease-in-out infinite alternate;
 }
 @keyframes logoGlow {
   0% { filter: drop-shadow(0 0 12px rgba(0,224,255,0.5)) drop-shadow(0 0 25px rgba(0,224,255,0.25)); transform: scale(1); }
   100% { filter: drop-shadow(0 0 25px rgba(0,224,255,0.9)) drop-shadow(0 0 55px rgba(0,224,255,0.5)); transform: scale(1.03); }
 }
+@keyframes rotateRing { to { transform: rotate(360deg); } }
+@keyframes rotateRingReverse { to { transform: rotate(-360deg); } }
 
-/* ============================================
-   نموذج الإدخال
-   ============================================ */
+/* الفورم */
 .id-form {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
   margin-top: 6px;
 }
-
 .field-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
+  width: 100%;
 }
-
 .id-label {
   text-align: center;
-  font-size: 12px;
-  letter-spacing: 6px;
+  font-size: 13px;
+  letter-spacing: 7px;
   font-weight: 700;
-  color: #7a9eb0;
+  color: #8ac4ff;
   text-transform: uppercase;
-  text-shadow: 0 0 15px rgba(0,224,255,0.5);
+  text-shadow: 0 0 15px rgba(0,224,255,0.9), 0 0 30px rgba(0,102,255,0.5);
   font-family: 'Georgia', 'Times New Roman', serif;
   font-style: italic;
-  padding-right: 6px;
 }
-
-/* خانة إدخال فخمة */
 .input-field {
   position: relative;
   width: 100%;
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 18px 20px;
-  background: linear-gradient(135deg, rgba(0,224,255,0.06), rgba(168,85,247,0.04));
-  border: 1.5px solid rgba(0, 224, 255, 0.3);
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(0,224,255,0.08), rgba(168,85,247,0.05));
+  border: 1.5px solid rgba(0, 224, 255, 0.4);
   border-radius: 18px;
   transition: all 0.4s ease;
   overflow: hidden;
-  box-shadow: 
-    0 8px 30px rgba(0,0,0,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.05);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
 }
 .input-field::before {
   content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 4px;
-  height: 100%;
+  position: absolute; top: 0; right: 0;
+  width: 4px; height: 100%;
   background: linear-gradient(to bottom, #00e0ff, #a855f7);
   box-shadow: 0 0 15px rgba(0,224,255,0.8);
 }
-.input-field::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(0,224,255,0.1), transparent);
-  transform: translateX(-100%);
-  transition: transform 0.8s;
-}
 .input-field:focus-within {
   border-color: #00e0ff;
-  background: linear-gradient(135deg, rgba(0,224,255,0.1), rgba(168,85,247,0.06));
-  box-shadow: 
-    0 8px 30px rgba(0,0,0,0.5),
-    0 0 40px rgba(0,224,255,0.3),
-    inset 0 1px 0 rgba(255,255,255,0.08);
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, rgba(0,224,255,0.14), rgba(168,85,247,0.08));
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5), 0 0 40px rgba(0,224,255,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
 }
-.input-field:focus-within::after {
-  transform: translateX(100%);
-}
-
-/* حالة الخطأ */
 .input-field.error {
   border-color: #ff3366;
   animation: shake 0.4s ease;
@@ -284,44 +199,44 @@ body{
   stroke: #ff3366;
   filter: drop-shadow(0 0 6px rgba(255,51,102,0.8));
 }
-
 .input-icon {
-  width: 22px; height: 22px;
+  width: 24px; height: 24px;
   flex-shrink: 0;
   stroke: #00e0ff;
   fill: none;
-  stroke-width: 1.8;
+  stroke-width: 2;
   filter: drop-shadow(0 0 6px rgba(0, 224, 255, 0.8));
   transition: 0.3s;
 }
 .input-field:focus-within .input-icon {
-  transform: scale(1.1);
+  transform: scale(1.15);
   stroke: #fff;
   filter: drop-shadow(0 0 10px rgba(255, 255, 255, 1));
 }
-
 .id-input {
   flex: 1;
   background: transparent;
   border: none;
   outline: none;
   color: #fff;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 700;
   font-family: 'SF Mono', Menlo, monospace;
-  letter-spacing: 3px;
+  letter-spacing: 4px;
   padding: 2px 0;
   min-width: 0;
+  text-align: right;
+  direction: ltr;
 }
 .id-input::placeholder {
-  color: #3a4a5a;
+  color: #4a5a6a;
   font-weight: 400;
-  letter-spacing: 2px;
-  font-size: 13px;
+  letter-spacing: 1px;
+  font-size: 14px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  text-align: right;
+  direction: rtl;
 }
-
-/* زر الاتصال الفخم */
 .connect-btn {
   position: relative;
   width: 100%;
@@ -331,57 +246,53 @@ body{
   border: none;
   border-radius: 18px;
   color: #fff;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 900;
-  letter-spacing: 5px;
+  letter-spacing: 6px;
   cursor: pointer;
   transition: all 0.4s ease;
-  box-shadow: 
-    0 12px 35px rgba(0, 224, 255, 0.35),
-    0 0 0 1px rgba(255,255,255,0.1) inset,
-    0 -3px 0 rgba(0,0,0,0.3) inset;
+  box-shadow: 0 12px 35px rgba(0, 224, 255, 0.45), 0 0 0 1px rgba(255,255,255,0.15) inset, 0 -3px 0 rgba(0,0,0,0.3) inset;
   overflow: hidden;
   animation: gradientShift 5s ease infinite;
   font-family: inherit;
   text-shadow: 0 2px 8px rgba(0,0,0,0.4);
-  margin-top: 8px;
+  margin-top: 10px;
 }
 @keyframes gradientShift {
   0%,100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }
-.connect-btn::before {
-  content: '';
-  position: absolute;
-  top: 0; left: -100%;
-  width: 100%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-  animation: shine 3s ease-in-out infinite;
-}
-@keyframes shine {
-  0% { left: -100%; }
-  50%, 100% { left: 100%; }
-}
 .connect-btn:active {
   transform: scale(0.97) translateY(2px);
-  box-shadow: 
-    0 5px 20px rgba(0, 224, 255, 0.6),
-    0 0 0 1px rgba(255,255,255,0.15) inset;
+  box-shadow: 0 5px 20px rgba(0, 224, 255, 0.6);
+}
+.error-msg {
+  text-align: center;
+  font-size: 14px;
+  color: #ff3366;
+  letter-spacing: 2px;
+  opacity: 0;
+  max-height: 0;
+  transition: all 0.3s ease;
+  font-weight: 700;
+  text-shadow: 0 0 15px rgba(255,51,102,0.8);
+}
+.error-msg.show {
+  opacity: 1;
+  max-height: 30px;
 }
 
-/* ============ شاشة اختيار السيرفر ============ */
+/* شاشة اختيار السيرفر */
 .title-text{font-size:16px;font-weight:800;letter-spacing:.3px;margin-bottom:6px;text-align:center}
-.subtitle-text{font-size:12.5px;color:var(--muted);margin-bottom:26px;text-align:center}
-
+.subtitle-text{font-size:12.5px;color:#7a7a7a;margin-bottom:26px;text-align:center}
 .operator-box{
   width:100%;border:1px solid rgba(0, 224, 255, 0.15);padding:2px 20px;border-radius:20px;
   background:linear-gradient(180deg, rgba(0, 224, 255, 0.03), rgba(255,255,255,0));
-  box-shadow:0 20px 40px rgba(0,0,0,.5), inset 0 0 0 1px rgba(0, 224, 255, 0.05);
+  box-shadow:0 20px 40px rgba(0,0,0,.5);
 }
 .operator-item{
   display:flex;align-items:center;justify-content:space-between;
   padding:20px 2px;cursor:pointer;border-bottom:1px solid rgba(0, 224, 255, 0.08);
-  transition:transform .18s ease, background .2s ease;
 }
 .operator-item:last-child{border-bottom:none;}
 .operator-item:active{transform:scale(.985);}
@@ -394,12 +305,10 @@ body{
 .checkbox.active{border-color:var(--accent);background:rgba(0,224,255,.1);box-shadow:0 0 14px rgba(0,224,255,.35)}
 .checkbox.active::after{content:'✔';font-size:13px;color:var(--accent);}
 
-/* ============ Loading Modal ============ */
+/* Loading */
 .loading-overlay{
   position:absolute;inset:0;z-index:100;
-  background:rgba(0,0,0,.6);
-  -webkit-backdrop-filter:blur(10px);
-  backdrop-filter:blur(10px);
+  background:rgba(0,0,0,.75);
   display:flex;align-items:center;justify-content:center;
   opacity:0;pointer-events:none;transition:opacity .3s ease;
 }
@@ -419,7 +328,7 @@ body{
 .loading-sub{font-size:12.5px;color:#888;line-height:1.5}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ============ Dashboard ============ */
+/* Dashboard */
 .dashboard-screen{ justify-content: center; padding-top: 90px; }
 .header-timer{
   position: absolute; top: 30px; left: 0; width: 100%;
@@ -437,6 +346,9 @@ body{
   text-align: center;
 }
 
+/* ============================================
+   الدائرة - الثعبان اللي بيلف حوالين الحدود
+   ============================================ */
 .circle-container{
   width: 300px; height: 300px;
   border-radius: 50%;
@@ -447,87 +359,157 @@ body{
   box-shadow: 
       0 0 80px rgba(0, 224, 255, 0.15),
       inset 0 0 80px rgba(0, 224, 255, 0.12),
-      0 0 0 1px rgba(0, 224, 255, 0.35);
+      0 0 0 1px rgba(0, 224, 255, 0.15);
   overflow: visible;
-  animation: corePulse 4s ease-in-out infinite;
-}
-@keyframes corePulse {
-  0%,100% { box-shadow: 0 0 80px rgba(0,224,255,0.15), inset 0 0 80px rgba(0,224,255,0.12), 0 0 0 1px rgba(0,224,255,0.35); }
-  50% { box-shadow: 0 0 120px rgba(0,224,255,0.3), inset 0 0 100px rgba(0,224,255,0.2), 0 0 0 1px rgba(0,224,255,0.6); }
 }
 
-.orbit { position: absolute; inset: -22px; border-radius: 50%; animation: rotateRing 8s linear infinite; }
-.orbit-dot {
-  position: absolute; top: 0; left: 50%;
-  width: 10px; height: 10px; margin-left: -5px;
-  background: #00e0ff; border-radius: 50%;
-  box-shadow: 0 0 15px #00e0ff, 0 0 30px #00e0ff;
+.snake-outer {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 270deg,
+    rgba(0, 224, 255, 0.1) 285deg,
+    rgba(0, 224, 255, 0.5) 310deg,
+    #00e0ff 345deg,
+    #ffffff 358deg,
+    #ffffff 360deg
+  );
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 4px));
+          mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 4px));
+  animation: snakeOuter 3s linear infinite;
+  filter: drop-shadow(0 0 12px #00e0ff) drop-shadow(0 0 24px rgba(0, 224, 255, 0.7));
+  z-index: 2;
+  pointer-events: none;
+  will-change: transform;
 }
-.orbit-dot-2 { top: auto; bottom: 0; background: #a855f7; box-shadow: 0 0 15px #a855f7, 0 0 30px #a855f7; }
+@keyframes snakeOuter { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-.ring-gradient {
-  position: absolute; inset: -3px; border-radius: 50%;
-  background: conic-gradient(from 0deg, transparent 0%, #00e0ff 25%, #a855f7 50%, transparent 75%);
-  animation: rotateRing 3s linear infinite;
+.snake-inner {
+  position: absolute;
+  inset: 14px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 280deg,
+    rgba(168, 85, 247, 0.1) 295deg,
+    rgba(168, 85, 247, 0.5) 320deg,
+    #a855f7 350deg,
+    #ffffff 359deg,
+    #ffffff 360deg
+  );
   -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
           mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
-  filter: drop-shadow(0 0 8px rgba(0, 224, 255, 0.8));
+  animation: snakeInner 5s linear infinite reverse;
+  filter: drop-shadow(0 0 10px #a855f7) drop-shadow(0 0 20px rgba(168, 85, 247, 0.6));
+  z-index: 2;
+  pointer-events: none;
+  will-change: transform;
 }
-.ring-dashed {
-  position: absolute; inset: 12px; border-radius: 50%;
-  border: 2px dashed rgba(0, 224, 255, 0.4);
-  animation: rotateRingReverse 22s linear infinite;
+@keyframes snakeInner { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.snake-head-outer {
+  position: absolute;
+  top: -3px; left: 50%;
+  width: 12px; height: 12px;
+  margin-left: -6px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 15px #fff, 0 0 30px #00e0ff, 0 0 45px #00e0ff;
+  z-index: 5;
+  animation: snakeHeadOuter 3s linear infinite;
+  pointer-events: none;
+  transform-origin: 6px 156px;
+  will-change: transform;
 }
-.ring-dots {
-  position: absolute; inset: 24px; border-radius: 50%;
-  border: 1px dotted rgba(0, 224, 255, 0.5);
-  animation: rotateRing 15s linear infinite;
+@keyframes snakeHeadOuter { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.snake-head-inner {
+  position: absolute;
+  top: 14px; left: 50%;
+  width: 9px; height: 9px;
+  margin-left: -4.5px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 12px #fff, 0 0 24px #a855f7, 0 0 36px #a855f7;
+  z-index: 5;
+  animation: snakeHeadInner 5s linear infinite reverse;
+  pointer-events: none;
+  transform-origin: 4.5px 136px;
+  will-change: transform;
 }
+@keyframes snakeHeadInner { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.circle-static-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 6;
+}
+
 .circle-grid {
-  position: absolute; inset: 0; border-radius: 50%;
+  position: absolute; inset: 30px;
+  border-radius: 50%;
   background-image: 
-      linear-gradient(rgba(0,224,255,0.08) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,224,255,0.08) 1px, transparent 1px);
+      linear-gradient(rgba(0,224,255,0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,224,255,0.1) 1px, transparent 1px);
   background-size: 25px 25px;
-  opacity: 0.8; z-index: 0;
-  -webkit-mask-image: radial-gradient(circle, #000 30%, transparent 70%);
-  mask-image: radial-gradient(circle, #000 30%, transparent 70%);
+  -webkit-mask-image: radial-gradient(circle, #000 30%, transparent 75%);
+  mask-image: radial-gradient(circle, #000 30%, transparent 75%);
+  animation: gridMove 5s linear infinite;
+  z-index: 0;
+  will-change: transform;
 }
+@keyframes gridMove {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(25px, 25px, 0); }
+}
+
 .radar-sweep {
-  position: absolute; inset: 38px; border-radius: 50%;
-  background: conic-gradient(from 0deg, transparent 0%, transparent 65%, rgba(0,224,255,0.7) 100%);
-  animation: rotateRing 2.5s linear infinite;
+  position: absolute; inset: 35px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0%, transparent 65%, rgba(0,224,255,0.6) 100%);
+  animation: rotateRing 3s linear infinite;
   -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px));
           mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px));
-  filter: drop-shadow(0 0 10px #00e0ff);
+  filter: drop-shadow(0 0 8px #00e0ff);
+  z-index: 1;
+  will-change: transform;
 }
-.circle-glare {
-  position: absolute; top: 4%; left: 12%;
-  width: 76%; height: 38%; border-radius: 50%;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.15), transparent 80%);
-  transform: rotate(-15deg);
-  pointer-events: none; z-index: 5;
-}
-.loading-drop {
-  position: absolute; top: -50px;
-  width: 6px; height: 50px;
-  background: linear-gradient(to bottom, transparent, #00e0ff, #fff);
+
+.ring-dots {
+  position: absolute; inset: 24px;
   border-radius: 50%;
-  box-shadow: 0 0 25px #00e0ff, 0 0 50px #00e0ff;
-  opacity: 0; z-index: 3;
+  border: 1px dotted rgba(0, 224, 255, 0.4);
+  z-index: 1;
 }
-.loading-drop.active { animation: dropBeam 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
-@keyframes dropBeam {
-  0% { top: -50px; opacity: 0; transform: scaleY(0.5); }
-  30% { top: 50%; opacity: 1; transform: scaleY(1); }
-  45% { top: 50%; opacity: 1; transform: scale(2) scaleY(4); filter: blur(6px); }
-  60% { top: 50%; opacity: 0; transform: scale(0); }
-  100% { top: 50%; opacity: 0; }
+
+.circle-glare {
+  position: absolute;
+  top: 6%; left: 14%;
+  width: 72%; height: 35%;
+  border-radius: 50%;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.1), transparent 80%);
+  transform: rotate(-15deg);
+  pointer-events: none;
+  z-index: 3;
 }
+
 .impact-ring {
-  position: absolute; width: 100%; height: 100%;
-  border-radius: 50%; border: 2px solid #00e0ff;
-  opacity: 0; z-index: 2; top: 0; left: 0;
+  position: absolute;
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  border: 2px solid #00e0ff;
+  opacity: 0;
+  z-index: 4;
+  top: 0; left: 0;
+  transform: scale(0);
 }
 .impact-ring.active { animation: impact 1.8s ease-out infinite; }
 .impact-ring.active.ring-2 { animation-delay: 0.25s; border-color: #a855f7; }
@@ -538,8 +520,34 @@ body{
   80% { transform: scale(1); opacity: 0; border-width: 1px; }
   100% { transform: scale(1); opacity: 0; }
 }
+
+.loading-drop {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 6px; height: 50px;
+  margin-top: -25px; margin-left: -3px;
+  background: linear-gradient(to bottom, transparent, #00e0ff, #fff);
+  border-radius: 50%;
+  box-shadow: 0 0 25px #00e0ff, 0 0 50px #00e0ff;
+  opacity: 0;
+  z-index: 7;
+  transform: translate3d(0, -200px, 0) scale(0);
+}
+.loading-drop.active {
+  animation: dropBeam 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+@keyframes dropBeam {
+  0%   { transform: translate3d(0, -200px, 0) scaleY(0.5); opacity: 0; }
+  30%  { transform: translate3d(0, 0, 0) scaleY(1); opacity: 1; }
+  45%  { transform: translate3d(0, 0, 0) scale(2) scaleY(4); opacity: 1; filter: blur(6px); }
+  60%  { transform: translate3d(0, 0, 0) scale(0); opacity: 0; }
+  100% { transform: translate3d(0, 0, 0) scale(0); opacity: 0; }
+}
+
 .circle-value{
-  font-size: 68px; font-weight: 900; letter-spacing: 3px;
+  font-size: 68px;
+  font-weight: 900;
+  letter-spacing: 3px;
   font-family: 'SF Mono', Menlo, monospace;
   color: #fff;
   text-shadow: 0 0 10px #fff, 0 0 25px #00e0ff, 0 0 50px #0066ff;
@@ -547,7 +555,10 @@ body{
   animation: popIn 0.6s cubic-bezier(.2,.9,.3,1.3);
   position: relative;
 }
-@keyframes popIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+@keyframes popIn{
+  from{opacity:0;transform:scale(.6)}
+  to{opacity:1;transform:scale(1)}
+}
 
 .footer-text{margin-top:32px;font-size:10.5px;color:#4a4a4a;letter-spacing:3px;text-transform:uppercase;}
 .hidden{display:none !important;}
@@ -557,43 +568,16 @@ body{
   25% { transform: translateX(-8px); }
   75% { transform: translateX(8px); }
 }
-
-/* رسالة خطأ صغيرة */
-.error-msg {
-  text-align: center;
-  font-size: 12px;
-  color: #ff3366;
-  letter-spacing: 1px;
-  opacity: 0;
-  max-height: 0;
-  transition: all 0.3s ease;
-  font-weight: 600;
-}
-.error-msg.show {
-  opacity: 1;
-  max-height: 30px;
-  margin-top: -4px;
-}
 </style>
 </head>
 <body>
 
-<!-- الخلفية المتحركة -->
-<div class="bg-grid"></div>
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="orb orb-3"></div>
-<div class="orb orb-4"></div>
-<div class="bg-ring bg-ring-1"></div>
-<div class="bg-ring bg-ring-2"></div>
-<div class="bg-ring bg-ring-3"></div>
-<div class="bg-vignette"></div>
-
 <div class="app">
-  <!-- ============ 1. شاشة إدخال ID + Password ============ -->
+  <div class="bg-gradient"></div>
+  <div class="bg-grid"></div>
+
+  <!-- ============ 1. شاشة الدخول ============ -->
   <div id="accountScreen" class="screen active">
-    
-    <!-- اللوجو مع الأشكال حواليه -->
     <div class="logo-wrap">
       <div class="logo-halo"></div>
       <div class="logo-ring ring-a"></div>
@@ -606,9 +590,8 @@ body{
       <img src="https://i.postimg.cc/RVQHkTkf/Photoroom-20260922-022921.png" class="logo-img" alt="Zeus Logo">
     </div>
 
-    <!-- نموذج الإدخال -->
     <div class="id-form">
-      <!-- ID Account -->
+      <!-- ID Account - أي حاجة تكتبها عادي -->
       <div class="field-group">
         <div class="id-label">ID Account</div>
         <div class="input-field" id="idField">
@@ -616,11 +599,11 @@ body{
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
             <circle cx="12" cy="7" r="4"/>
           </svg>
-          <input type="text" id="accountIdInput" class="id-input" placeholder="أدخل الرقم الخاص بك" inputmode="numeric" autocomplete="off">
+          <input type="text" id="accountIdInput" class="id-input" placeholder="اكتب الـ ID" autocomplete="off">
         </div>
       </div>
 
-      <!-- Password -->
+      <!-- Password - لازم 1234 -->
       <div class="field-group">
         <div class="id-label">Password</div>
         <div class="input-field" id="passField">
@@ -632,7 +615,7 @@ body{
         </div>
       </div>
       
-      <div class="error-msg" id="errorMsg">كلمة السر غير صحيحة</div>
+      <div class="error-msg" id="errorMsg">كلمة السر خاطئة</div>
       
       <button class="connect-btn" onclick="connectAccount()">اتصال</button>
     </div>
@@ -666,7 +649,7 @@ body{
     </div>
   </div>
 
-  <!-- ============ 3. نافذة التحميل ============ -->
+  <!-- Loading -->
   <div id="loadingOverlay" class="loading-overlay">
     <div class="loading-card">
       <div class="spinner-lg"></div>
@@ -686,23 +669,21 @@ body{
     <div class="main-title">ZEUS SCRIPT</div>
     
     <div class="circle-container">
+      <div class="snake-outer"></div>
+      <div class="snake-head-outer"></div>
+      
+      <div class="snake-inner"></div>
+      <div class="snake-head-inner"></div>
+      
       <div class="circle-grid"></div>
-      
-      <div class="orbit">
-        <div class="orbit-dot"></div>
-        <div class="orbit-dot orbit-dot-2"></div>
-      </div>
-      
-      <div class="ring-gradient"></div>
-      <div class="ring-dashed"></div>
-      <div class="ring-dots"></div>
       <div class="radar-sweep"></div>
+      <div class="ring-dots"></div>
+      <div class="circle-glare"></div>
       
       <div class="impact-ring" id="impactRing1"></div>
       <div class="impact-ring ring-2" id="impactRing2"></div>
       
       <div class="loading-drop" id="loadingDrop"></div>
-      <div class="circle-glare"></div>
       
       <div class="circle-value hidden" id="valueDisplay">0.00</div>
     </div>
@@ -714,6 +695,14 @@ body{
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+function setVH() {
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', vh + 'px');
+}
+setVH();
+window.addEventListener('resize', setVH);
+window.addEventListener('orientationchange', () => setTimeout(setVH, 200));
 
 const firebaseConfig = {
   apiKey: "AIzaSyAUc2C9hG9VE7RECiW19QXjNZqVH96sFE",
@@ -728,8 +717,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// كلمة السر المطلوبة
-const REQUIRED_PASSWORD = "1234";
+// ============================================
+// كلمة السر المطلوبة فقط
+// ============================================
+const VALID_PASSWORD = "1234";
+// ============================================
 
 let topTimerInterval;
 let predictionQueue = [];
@@ -741,40 +733,27 @@ function showScreen(id){
   document.getElementById(id).classList.add('active');
 }
 
-// دالة الاتصال مع التحقق من كلمة السر
+// ============================================
+// الاتصال: الـ ID أي حاجة، الباسورد لازم 1234
+// ============================================
 window.connectAccount = function(){
-  const accountId = document.getElementById('accountIdInput').value.trim();
-  const password = document.getElementById('passwordInput').value.trim();
-  const idField = document.getElementById('idField');
+  const inputPass = document.getElementById('passwordInput').value.trim();
   const passField = document.getElementById('passField');
   const errorMsg = document.getElementById('errorMsg');
 
-  // تصفير الحالة
-  idField.classList.remove('error');
   passField.classList.remove('error');
   errorMsg.classList.remove('show');
 
-  // التحقق من خانة ID
-  if (!accountId) {
-    idField.classList.add('error');
-    setTimeout(()=>{ idField.classList.remove('error'); }, 500);
-    return;
-  }
-
-  // التحقق من كلمة السر
-  if (password !== REQUIRED_PASSWORD) {
+  // لو الباسورد غلط أو فاضي
+  if (!inputPass || inputPass !== VALID_PASSWORD) {
     passField.classList.add('error');
     errorMsg.classList.add('show');
-    setTimeout(()=>{ 
-      passField.classList.remove('error'); 
-    }, 500);
-    setTimeout(()=>{ 
-      errorMsg.classList.remove('show'); 
-    }, 2500);
+    setTimeout(()=>{ passField.classList.remove('error'); }, 500);
+    setTimeout(()=>{ errorMsg.classList.remove('show'); }, 2500);
     return;
   }
 
-  // النجاح - الانتقال للشاشة التالية
+  // الباسورد صح → الشاشة التالية (الـ ID مش مهم)
   showScreen('selectionScreen');
 };
 
